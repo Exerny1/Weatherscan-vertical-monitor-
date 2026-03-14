@@ -7,22 +7,19 @@
             width: 100vw; height: 100vh; 
             overflow: hidden; 
             background: #000 !important; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         iframe {
-            border: none;
-            /* Using vh for width because of the 90deg rotation */
+            position: absolute;
+            top: 50%; left: 50%;
+            /* Let the browser handle the content layout naturally */
             width: 100vh; 
             height: 100vw;
+            border: none;
             
-            /* THE ROTATION: Turn 90 degrees to the right */
-            transform: rotate(90deg);
-            transform-origin: center;
+            /* Pure rotation, zero scaling/aspect scripts */
+            transform: translate(-50%, -50%) rotate(90deg);
             
-            /* Keeps the center window clean and interactive */
             pointer-events: auto;
         }
     </style>
@@ -31,7 +28,6 @@
     <iframe id="weather-frame" src="https://v2.weatherscan.net/?Manassas"></iframe>
 
     <script>
-        // Simple hourly refresh to keep the data current
         setInterval(function() {
             var iframe = document.getElementById('weather-frame');
             var timestamp = new Date().getTime();
