@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html, body { 
+            margin: 0; padding: 0; 
+            width: 100vw; height: 100vh; 
+            overflow: hidden; 
+            background: #000 !important; 
+        }
+
+        iframe {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+            
+            /* YOUR HIGH-FPS LOCKS */
+            transform: perspective(1000px) translateZ(0) scaleX(1.34);
+            transform-origin: center;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            
+            image-rendering: pixelated;
+            will-change: transform, contents;
+            
+            /* KEEP INTERACTIVE */
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="weather-frame" src="https://v2.weatherscan.net/?Manassas"></iframe>
+
+    <script>
+        setInterval(function() {
+            var iframe = document.getElementById('weather-frame');
+            var timestamp = new Date().getTime();
+            
+            /* THE SPECIFIC REFRESH YOU WANTED: 
+               Changes the hash (#) so the emulator stays on Manassas 
+               but the browser thinks it's a "new" load to clear cache. */
+            iframe.src = "https://v2.weatherscan.net/?Manassas#" + timestamp;
+            
+            console.log("Memory cleared. Location preserved.");
+        }, 3600000); 
+    </script>
+</body>
+</html>
