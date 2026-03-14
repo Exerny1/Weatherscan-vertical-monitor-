@@ -10,21 +10,29 @@
         }
 
         iframe {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: absolute;
+            /* We center it first to ensure the rotation stays in the frame */
+            top: 50%; left: 50%;
+            
+            /* SWAPPED DIMENSIONS: Since we are rotating, 
+               the width of the content becomes the height of the screen */
+            width: 100vh; 
+            height: 100vw;
+            
             border: none;
             
-            /* YOUR HIGH-FPS LOCKS */
-            transform: perspective(1000px) translateZ(0) scaleX(1.34);
+            /* ROTATION AND SCALE LOCKS */
+            /* 1. translate(-50%, -50%) centers the frame
+               2. rotate(90deg) turns it to the right
+               3. scale(1.7) fills the vertical space (adjust if needed) */
+            transform: translate(-50%, -50%) rotate(90deg) scale(1.7);
+            
             transform-origin: center;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             
             image-rendering: pixelated;
-            will-change: transform, contents;
-            
-            /* KEEP INTERACTIVE */
+            will-change: transform;
             pointer-events: auto;
         }
     </style>
@@ -33,16 +41,12 @@
     <iframe id="weather-frame" src="https://v2.weatherscan.net/?Manassas"></iframe>
 
     <script>
+        // High-FPS Memory Refresh
         setInterval(function() {
             var iframe = document.getElementById('weather-frame');
             var timestamp = new Date().getTime();
-            
-            /* THE SPECIFIC REFRESH YOU WANTED: 
-               Changes the hash (#) so the emulator stays on Manassas 
-               but the browser thinks it's a "new" load to clear cache. */
             iframe.src = "https://v2.weatherscan.net/?Manassas#" + timestamp;
-            
-            console.log("Memory cleared. Location preserved.");
+            console.log("Portrait refresh complete.");
         }, 3600000); 
     </script>
 </body>
