@@ -13,21 +13,16 @@
         }
 
         iframe {
-            /* We lock the width to 100% of the vertical screen */
-            width: 100vw;
-            /* We calculate the height to maintain the original 4:3 ratio */
-            /* (100 / 4) * 3 = 75vw */
-            height: 75vw; 
-            
             border: none;
+            /* Using vh for width because of the 90deg rotation */
+            width: 100vh; 
+            height: 100vw;
             
-            /* HIGH-FPS LOCKS (Removed ScaleX stretching) */
-            transform: perspective(1000px) translateZ(0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+            /* THE ROTATION: Turn 90 degrees to the right */
+            transform: rotate(90deg);
+            transform-origin: center;
             
-            image-rendering: pixelated;
-            will-change: transform, contents;
+            /* Keeps the center window clean and interactive */
             pointer-events: auto;
         }
     </style>
@@ -36,11 +31,11 @@
     <iframe id="weather-frame" src="https://v2.weatherscan.net/?Manassas"></iframe>
 
     <script>
+        // Simple hourly refresh to keep the data current
         setInterval(function() {
             var iframe = document.getElementById('weather-frame');
             var timestamp = new Date().getTime();
             iframe.src = "https://v2.weatherscan.net/?Manassas#" + timestamp;
-            console.log("Memory cleared. Original aspect preserved.");
         }, 3600000); 
     </script>
 </body>
