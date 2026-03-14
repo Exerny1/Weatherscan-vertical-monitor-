@@ -7,32 +7,27 @@
             width: 100vw; height: 100vh; 
             overflow: hidden; 
             background: #000 !important; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         iframe {
-            position: absolute;
-            /* We center it first to ensure the rotation stays in the frame */
-            top: 50%; left: 50%;
-            
-            /* SWAPPED DIMENSIONS: Since we are rotating, 
-               the width of the content becomes the height of the screen */
-            width: 100vh; 
-            height: 100vw;
+            /* We lock the width to 100% of the vertical screen */
+            width: 100vw;
+            /* We calculate the height to maintain the original 4:3 ratio */
+            /* (100 / 4) * 3 = 75vw */
+            height: 75vw; 
             
             border: none;
             
-            /* ROTATION AND SCALE LOCKS */
-            /* 1. translate(-50%, -50%) centers the frame
-               2. rotate(90deg) turns it to the right
-               3. scale(1.7) fills the vertical space (adjust if needed) */
-            transform: translate(-50%, -50%) rotate(90deg) scale(1.7);
-            
-            transform-origin: center;
+            /* HIGH-FPS LOCKS (Removed ScaleX stretching) */
+            transform: perspective(1000px) translateZ(0);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             
             image-rendering: pixelated;
-            will-change: transform;
+            will-change: transform, contents;
             pointer-events: auto;
         }
     </style>
@@ -41,12 +36,11 @@
     <iframe id="weather-frame" src="https://v2.weatherscan.net/?Manassas"></iframe>
 
     <script>
-        // High-FPS Memory Refresh
         setInterval(function() {
             var iframe = document.getElementById('weather-frame');
             var timestamp = new Date().getTime();
             iframe.src = "https://v2.weatherscan.net/?Manassas#" + timestamp;
-            console.log("Portrait refresh complete.");
+            console.log("Memory cleared. Original aspect preserved.");
         }, 3600000); 
     </script>
 </body>
